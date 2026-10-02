@@ -1,0 +1,249 @@
+.incident-bg-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -10;
+  pointer-events: none;
+  overflow: hidden;
+  --mouse-x: 0px;
+  --mouse-y: 0px;
+  --glow-x: 50vw;
+  --glow-y: 50vh;
+}
+
+.incident-bg-gradient {
+  position: absolute;
+  inset: -10%;
+  width: 120%;
+  height: 120%;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(56, 189, 248, 0.04), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.03), transparent 40%);
+  transform: translate(calc(var(--mouse-x) * 0.2), calc(var(--mouse-y) * 0.2));
+  transition: transform 0.2s ease-out;
+}
+
+.incident-bg-scan {
+  position: absolute;
+  top: 0; left: 0; width: 200%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.02) 50%, transparent);
+  animation: scanSweep 12s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scanSweep {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(50%); }
+}
+
+.ambient-drifters {
+  opacity: 0.8;
+}
+
+.drifter {
+  fill: url(#glow-intense);
+  mix-blend-mode: screen;
+}
+
+.drift-1 { fill: rgba(56, 189, 248, 0.02); animation: float 25s ease-in-out infinite alternate; }
+.drift-2 { fill: rgba(16, 185, 129, 0.015); animation: float 35s ease-in-out infinite alternate-reverse; }
+.drift-3 { fill: rgba(245, 158, 11, 0.01); animation: float 40s ease-in-out infinite alternate; }
+
+@keyframes float {
+  0% { transform: translate(0, 0); }
+  33% { transform: translate(50px, -50px); }
+  66% { transform: translate(-30px, 30px); }
+  100% { transform: translate(40px, 20px); }
+}
+
+.incident-bg-glow {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle 600px at var(--glow-x) var(--glow-y), rgba(56, 189, 248, 0.04), transparent 50%);
+  transition: opacity 0.3s ease;
+  mix-blend-mode: screen;
+}
+
+.incident-bg-grid {
+  position: absolute;
+  inset: -10%;
+  width: 120%;
+  height: 120%;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  transform: translate(calc(var(--mouse-x) * 0.5), calc(var(--mouse-y) * 0.5));
+  transition: transform 0.1s ease-out;
+  animation: gridDrift 60s linear infinite;
+}
+
+@keyframes gridDrift {
+  from { background-position: 0 0; }
+  to { background-position: -40px -40px; }
+}
+
+.incident-bg-network {
+  position: absolute;
+  inset: -5%;
+  width: 110%;
+  height: 110%;
+  transform: translate(var(--mouse-x), var(--mouse-y));
+  transition: transform 0.1s ease-out;
+}
+
+/* SVG Line Styles */
+.net-line {
+  stroke: rgba(255, 255, 255, 0.04);
+  stroke-width: 1px;
+}
+
+/* Packet Animation using stroke-dashoffset */
+/* Path length approx 1500 for a 100% SVG, using percentage-based dashes is tricky, 
+   so we use a large dash array that works relative to viewport size */
+.net-packet {
+  stroke-width: 2px;
+  stroke-dasharray: 60 4000;
+  stroke-dashoffset: 4000;
+  stroke-linecap: round;
+  filter: url(#glow);
+  animation: movePacket linear infinite;
+}
+
+.net-packet.reverse {
+  animation-name: movePacketReverse;
+}
+
+.packet-replay {
+  stroke: #7dd3fc;
+  stroke-width: 2.5px;
+  stroke-dasharray: 20 15 20 4000;
+  filter: url(#glow-intense);
+}
+
+@keyframes movePacket {
+  0% { stroke-dashoffset: 4000; opacity: 0; }
+  5% { opacity: 1; }
+  95% { opacity: 1; }
+  100% { stroke-dashoffset: -80; opacity: 0; }
+}
+
+@keyframes movePacketReverse {
+  0% { stroke-dashoffset: -80; opacity: 0; }
+  5% { opacity: 1; }
+  95% { opacity: 1; }
+  100% { stroke-dashoffset: 4000; opacity: 0; }
+}
+
+/* Packet Colors */
+.packet-blue { stroke: var(--accent-primary); }
+.packet-green { stroke: var(--accent-success); }
+.packet-amber { stroke: var(--accent-warning); }
+.packet-red { stroke: var(--accent-error); }
+.packet-cyan { stroke: #22d3ee; }
+
+/* Data Flow (Faint dashed lines moving continuously) */
+.net-data-flow {
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1px;
+  stroke-dasharray: 4 8;
+  animation: moveDataFlow 20s linear infinite;
+}
+
+@keyframes moveDataFlow {
+  from { stroke-dashoffset: 1000; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* Target Zone */
+.target-zone {
+  fill: rgba(34, 211, 238, 0.02);
+  stroke: rgba(34, 211, 238, 0.1);
+  stroke-width: 1px;
+  stroke-dasharray: 4;
+}
+
+.target-zone-text {
+  fill: rgba(34, 211, 238, 0.3);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+/* Node Styles */
+.node {
+  fill: var(--bg-base);
+  stroke-width: 1.5px;
+}
+.node-primary { stroke: var(--accent-primary); }
+.node-success { stroke: var(--accent-success); }
+.node-warning { stroke: var(--accent-warning); }
+.node-error { stroke: var(--accent-error); }
+
+.opacity-50 { opacity: 0.5; }
+.opacity-25 { opacity: 0.25; }
+
+/* Node Pulses & Heartbeats */
+.heartbeat-node {
+  animation: heartbeat 4s ease-in-out infinite;
+}
+.heartbeat-error {
+  animation: heartbeatError 2s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { stroke-width: 1.5px; filter: none; }
+  50% { stroke-width: 2.5px; filter: url(#glow); }
+}
+@keyframes heartbeatError {
+  0%, 100% { fill: var(--bg-base); }
+  50% { fill: rgba(239, 68, 68, 0.4); filter: url(#glow-intense); }
+}
+
+.node-pulse {
+  fill: none;
+  stroke: var(--accent-primary);
+  stroke-width: 1px;
+  animation: pulseNode 5s ease-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.pulse-error {
+  stroke: var(--accent-error);
+  animation-duration: 4s;
+}
+
+@keyframes pulseNode {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.8;
+  }
+  70% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .net-packet, .ambient-drifters, .incident-bg-scan {
+    display: none;
+  }
+  .node-pulse, .heartbeat-node, .heartbeat-error {
+    animation: none;
+  }
+  .incident-bg-network,
+  .incident-bg-grid,
+  .incident-bg-gradient {
+    transform: none !important;
+    transition: none;
+    animation: none;
+  }
+}

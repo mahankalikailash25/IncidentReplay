@@ -1,0 +1,43 @@
+# Build artifacts
+target/
+*.jar
+*.war
+
+# Node and UI builds
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+replay-target/node_modules/
+
+# Environment and Secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.p12
+*.jks
+secrets/
+application-secret.properties
+
+# IDE specific files
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+logs/
+*.log
+
+# Temp files
+tmp/
+temp/
